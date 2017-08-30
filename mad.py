@@ -7,12 +7,9 @@ const fs = require('fs')
 const request = require('request') // REQUIRE request. Similar to import in python.
 var prefix = '!' // prefix for stuff lol
 var globalChannel;
-var newErrors = request('https://analyticord.solutions/api/error?error=list', function (error, response,body) {
-  if (error){ console.log('statusCode', response) } } ) 
+var newErrors; 
 
-var oldErrors = fs.readFile('errorlist.txt', function read (err, data) {
-    if (err) { console.log('[FATAL] Error at jsonCheck:', err) }
-  });
+var oldErrors;
 //var channel = "351520153634078721"
 
 
@@ -26,12 +23,12 @@ client.on('ready', () => { // On ready, do this!
 })
 
 
-function jsonCheck () {
-    fs.writeFile('errorlist.txt', newErrors)
-    console.log('New errors found. Sending channel message...')
-    globalChannel.send('ErrorTest')
+
+function messageErrorChange () {
+  globalChannel.send('ErorrTest')
 };
-  
+
+
 
 setInterval(function jsonGrab () {
   
@@ -44,9 +41,23 @@ setInterval(function jsonGrab () {
     console.log('[REQUEST] statusCode:', response && response.statusCode)
       // console.log('body:', body); // Print the HTML for the Google homepage.
     fs.writeFile('errorlist.txt', body)
+    errorChecker();
   })
-  if (newErrors !== oldErrors) { jsonCheck() }
 }, 10000)
+
+
+function errorChecker() {
+
+newErrors = request('https://analyticord.solutions/api/error?error=list', function (error, response, body) {});
+
+if (oldErrors == newErrors) {console.log('No new errors.')} 
+
+oldErrors = fs.readFile('errorlist.txt', function read (err, data) {
+  if (err) { console.log('[FATAL] Error at jsonCheck:', err)
+  if (newErrors !== data ) { messageErrorChange(), console.log(data)} }
+} );
+
+}
   
 
 
@@ -55,4 +66,4 @@ setInterval(function jsonGrab () {
 
 
 
-client.login('<3')
+client.login(nah')
