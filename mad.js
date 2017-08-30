@@ -30,11 +30,11 @@ function messageErrorChange () {
 
 
 
-setInterval(function jsonGrab () {
+let jsonGrab = setInterval(() => {
   
   console.log('Grabbing JSON from https://analyticord.solutions/api/error?error=list')
-
-  var requestgrab = request('https://analyticord.solutions/api/error?error=list')
+try {
+ var requestgrab = request('https://analyticord.solutions/api/error?error=list')
 
   request('https://analyticord.solutions/api/error?error=list', function (error, response, body) {
     if (error) { console.log('[FATAL] Error:', error) }// Print the error if one occurred
@@ -43,20 +43,23 @@ setInterval(function jsonGrab () {
     fs.writeFile('errorlist.txt', body)
     errorChecker();
   })
+} catch(e) {console.error(e)}
 }, 10000)
+
 
 
 function errorChecker() {
 
-newErrors = request('https://analyticord.solutions/api/error?error=list', function (error, response, body) {});
+newErrors = request('https://analyticord.solutions/api/error?error=list', function (error, response, body) {
 
-if (oldErrors == newErrors) {console.log('No new errors.')} 
+  if (body == oldErrors) {console.log('No new errors.')}
+  else { 
 
 oldErrors = fs.readFile('errorlist.txt', function read (err, data) {
   if (err) { console.log('[FATAL] Error at jsonCheck:', err)
   if (newErrors !== data ) { messageErrorChange(), console.log(data)} }
 } );
-
+  }})
 }
   
 
@@ -66,4 +69,4 @@ oldErrors = fs.readFile('errorlist.txt', function read (err, data) {
 
 
 
-client.login(nah')
+client.login(')
